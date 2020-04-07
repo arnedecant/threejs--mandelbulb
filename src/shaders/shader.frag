@@ -11,40 +11,41 @@
 #define MAX_ITERATIONS 4
 #define minRange 6e-5
 
-// 10 a 200  "The maximum number of steps a ray should take."
+// 10 - 200  "The maximum number of steps a ray should take."
 #define STEP_LIMIT 110
 
 // viewMatrix and cameraPosition are automatically included by THREE.js
 uniform mat4 modelMatrix;
 uniform mat4 modelViewMatrix;
 uniform float time;
+
+uniform float power; //=8.0; //-20 -> 20 // Power of fractal
+uniform bool phong;
+uniform float shadows; //=0.0;
+uniform float ambientOcclusion; //=0.9;
+uniform float ambientOcclusionEmphasis; //=0.98; //"Emphasise the structure edges based on the number of steps it takes to reach a point in the fractal.";
+uniform float bounding; //=1.5; //1->16 "Sets the bounding sphere radius to help accelerate the raytracing.";
+uniform float bailout; //=2.0; //0.5->12 //"Sets the bailout value for the fractal calculation. Lower values give smoother less detailed results.";
+
+uniform float colorSpread; //=0.2;
+uniform float rimLight; //=0.0;
+uniform float specularity; //=0.66;
+uniform float specularExponent; //=15.0;
+
+uniform float epsilonScale; //=1.0; // 0 - 1  "Scale the epsilon step distance. Smaller values are slower but will generate smoother results for thin areas.";
+
 varying vec3 rayDir;
 
-
-float width=600.0;//=512;
-float height=600.0;//=512;
+float width=512.0;//=512;
+float height=512.0;//=512;
 float pixelSize=1.0;//width/height;//1.0;
-int   antialiasing=0;//"Super sampling quality. Number of samples squared per pixel.";
-bool  phong=true;
-float shadows=0.0;
-float ambientOcclusion=0.9;
-float ambientOcclusionEmphasis=0.98; //"Emphasise the structure edges based on the number of steps it takes to reach a point in the fractal.";
-float bounding=1.5; //1->16 "Sets the bounding sphere radius to help accelerate the raytracing.";
-float bailout=2.0; //0.5->12 //"Sets the bailout value for the fractal calculation. Lower values give smoother less detailed results.";
-
-float power=8.0;//=8.0;//-20->20 // Power of fractal
+int   antialiasing=1;//"Super sampling quality. Number of samples squared per pixel.";
 
 vec3  light=vec3(38.0, -42.0, 38.0);
-vec4  backgroundColor=vec4(0.0, 0.0, 0.0,1.0);
-vec4  diffuseColor=vec4(0.0, 0.85, 0.99,1.0);
-vec4  ambientColor=vec4(0.67, 0.85, 1.0,1.0);
-vec4  lightColor=vec4(0.48, 0.59, 0.66,0.0);
-float colorSpread=0.2;//=0.2; // 0 -> // varier les couleurs
-float rimLight=0.0;
-float specularity=0.66;
-float specularExponent=15.0;
-
-float epsilonScale=1.0; // 0 a 1  "Scale the epsilon step distance. Smaller values are slower but will generate smoother results for thin areas.";
+vec4  backgroundColor=vec4(0.0, 0.0, 0.0, 1.0);
+vec4  diffuseColor=vec4(0.0, 0.85, 0.99, 1.0);
+vec4  ambientColor=vec4(0.67, 0.85, 1.0, 1.0);
+vec4  lightColor=vec4(0.48, 0.59, 0.66, 0.0);
 
 float phasex;
 float phasey;

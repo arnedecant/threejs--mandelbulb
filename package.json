@@ -7,6 +7,7 @@
 	"dependencies": {
 		"babel-preset-env": "^1.7.0",
 		"browser-sync": "^2.24.4",
+		"dat.gui": "^0.7.7",
 		"del": "^3.0.0",
 		"gulp": "^4.0.0",
 		"gulp-autoprefixer": "^5.0.0",

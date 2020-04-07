@@ -6,7 +6,7 @@
 
 // Base
 
-@import "base/_reset";
+// @import "base/_reset";
 // @import "base/_normalize";
 // @import "base/_typography";
 // @import "base/_animations";
@@ -32,7 +32,8 @@ body {
     background-color: var(--color-secondary);
 	width: 100%;
 	height: 100vh;
-	overflow: hidden;
+    overflow: hidden;
+    margin: 0;
 }
 
 [disabled] {
@@ -51,71 +52,4 @@ body {
 	// background: linear-gradient(#e4e0ba, #f7d9aa);
 	// background: #cdf9ff;
 	background: #222;
-}
-
-.interface {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    z-index: 99;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--color-default);
-    padding: 0.5em;
-}
-
-.interface video {
-    width: 10rem;
-    height: auto;
-    transform: scaleX(-1);
-}
-
-.interface label {
-    margin: 0.5em 0;
-}
-
-dialog {
-    all: unset;
-
-    max-width: 90vw;
-    width: 50rem;
-
-    display: block;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(.8);
-    opacity: 0;
-    padding: 1em;
-    background: var(--color-default);
-    color: var(--color-secondary);
-    pointer-events: none;
-
-    transition: .3s ease;
-    transition-property: opacity, transform;
-}
-
-dialog[open] {
-    pointer-events: all;
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-}
-
-dialog header {
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: 1.2rem;
-}
-
-.btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--color-secondary);
-    color: var(--color-default);
-    padding: 0.6em 0.8em;
-    // text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 300;
 }

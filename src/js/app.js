@@ -7,6 +7,7 @@
 // https://www.taoeffect.com/other/fractals/mandelbulb/
 
 import Engine from './Engine.js'
+// import { GUI } from 'dat.gui'
 
 class App {
 
@@ -32,12 +33,6 @@ class App {
 		this.shaders = {
 			vertex: document.querySelector('[data-shader="vertex"]').textContent,
 			fragment: document.querySelector('[data-shader="fragment"]').textContent
-		}
-
-		this.uniforms = {
-            time: { type: 'f', value: 1.0 },
-            modelViewProjectMatrixInverse: { type: 'm4', value: [] },
-            // resolution: { type: 'v2', value: new THREE.Vector2() }
 		}
 		
 		this.modelViewProjectMatrixInverse = new THREE.Matrix4()
@@ -75,6 +70,38 @@ class App {
 
 		this.clear()
 
+		this.uniforms = {
+			time: { type: 'f', value: 1.0 },
+            modelViewProjectMatrixInverse: { type: 'm4', value: [] },
+			// resolution: { type: 'v2', value: new THREE.Vector2() }
+			iterations: { value: 4 },
+			power: { type: 'f', value: 8.0 },
+			phong: { type: 'b', value: true },
+			shadows: { type: 'f', value: 0.0 },
+			ambientOcclusion: { type: 'f', value: 0.9 },
+			ambientOcclusionEmphasis: { type: 'f', value: 0.98 },
+			bounding: { type: 'f', value: 1.5 },
+			bailout: { type: 'f', value: 2.0 },
+			colorSpread: { type: 'f', value: 0.2 },
+			rimLight: { type: 'f', value: 0.0 },
+			specularity: { type: 'f', value: 0.66 },
+			specularExponent: { type: 'f', value: 15.0 },
+			epsilonScale: { type: 'f', value: 1.0 },
+		}
+
+		GUI.add(this.uniforms.power, 'value', -20, 20).step(1).name('power')
+		GUI.add(this.uniforms.phong, 'value').name('phong')
+		GUI.add(this.uniforms.shadows, 'value', 0.0, 1.0).step(0.01).name('shadows')
+		GUI.add(this.uniforms.ambientOcclusion, 'value', 0.0, 3.0).step(0.1).name('ambientOcclusion')
+		GUI.add(this.uniforms.ambientOcclusionEmphasis, 'value', 0.0, 3.0).step(0.01).name('ambientOcclusionEmphasis')
+		GUI.add(this.uniforms.bounding, 'value', 0.5, 1.5).step(0.1).name('bounding')
+		GUI.add(this.uniforms.bailout, 'value', 1.0, 5.0).step(0.1).name('bailout')
+		GUI.add(this.uniforms.colorSpread, 'value', 0.0, 5.0).step(0.2).name('colorSpread')
+		GUI.add(this.uniforms.rimLight, 'value', 0.0, 2.0).step(0.1).name('rimLight')
+		GUI.add(this.uniforms.specularity, 'value', 0.0, 2.0).step(0.01).name('specularity')
+		GUI.add(this.uniforms.specularExponent, 'value', 0.0, 30.0).step(1.0).name('specularExponent')
+		GUI.add(this.uniforms.epsilonScale, 'value', 0.0, 1.0).step(0.01).name('epsilonScale')
+
 		const geometry = new THREE.PlaneGeometry(2, 2)
 		const material = new THREE.ShaderMaterial({
 			uniforms: this.uniforms,
@@ -92,6 +119,18 @@ class App {
 		ENGINE.add(this.mesh)
 
 		this.render()
+
+	}
+
+	onUpdateGUI(key, value) {
+
+		switch (key) {
+			default:
+				this.uniforms[key].value = value
+				break
+		}
+
+		console.log('update:', key, value)
 
 	}
 

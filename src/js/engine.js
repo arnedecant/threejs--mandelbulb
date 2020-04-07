@@ -1,4 +1,4 @@
-import Preloader from "./helpers/preloader"
+import * as dat from 'dat.gui'
 
 // -------------------------------------------------------------------
 // :: Engine
@@ -19,6 +19,7 @@ export default class Engine {
 		this.raycaster = new THREE.Raycaster()
 		this.container = container
 		this.clock = window.CLOCK = new THREE.Clock()
+		this.GUI = window.GUI = new dat.GUI()
 
 		if (typeof this.container === 'string') this.container = document.querySelector(this.container)
 
