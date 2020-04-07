@@ -1,0 +1,18 @@
+{
+	"production": false,
+	"breakpoints": {
+		"small": "40em",
+		"medium": "60em",
+		"large": "80em"
+	},
+	"targets": [
+		{
+			"id": "index",
+			"seo-title": "Mandelbulb",
+			"seo-description": "",
+			"src-html": "index.html",
+			"src-sass": "main.scss",
+			"src-js": "app.js"
+		}
+	]
+}

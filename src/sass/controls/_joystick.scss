@@ -1,0 +1,40 @@
+.joystick, .joystick__thumb {
+    border-radius: 50%;
+}
+
+.joystick {
+    --translateX: 0px;
+    --translateY: 0px;
+    --shadowX: 0px;
+    --shadowY: 0px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 6rem; 
+    height: 6rem; 
+
+    background-color: rgba(var(--rgb-default), 0.2); 
+    border: var(--color-secondary) solid 5px;
+}
+
+.joystick__thumb {
+    --y: 4px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%; 
+    height: 50%; 
+
+    color: var(--color-primary);
+    background-color: var(--color-secondary);
+    border: var(--color-secondary) solid 2px;
+    box-shadow: var(--shadowX, 0px) var(--shadowY, 0px) 0 0 var(--color-primary);
+
+    transform: translate(var(--translateX, 0), var(--translateY, 0));
+}
+
+.joystick__thumb i {
+    transform: rotate(45deg);
+}

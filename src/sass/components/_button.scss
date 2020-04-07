@@ -1,0 +1,41 @@
+a *, button * {
+    pointer-events: none;
+}
+
+.btn:active {
+    box-shadow: 0 1px 0 0 var(--color-primary);
+    transform: translate(0, var(--y));
+}
+
+.btn[disabled] {
+    pointer-events: none;
+}
+
+.btn[disabled] i {
+    opacity: 0.2;
+}
+
+.btn {
+    --y: 4px;
+
+    all: unset;
+    cursor: pointer;
+    user-select: none;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
+    font-size: 1.2rem;
+    box-shadow: 0 var(--y) 0 0 var(--color-primary);
+
+    transition: all .2s ease;
+}
+
+.btn-round {
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+}

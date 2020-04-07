@@ -1,0 +1,95 @@
+.inventory, .inventory * {
+    user-select: none;
+}
+
+.inventory {
+    --cols: 3;
+    --gap: 0.5rem;
+
+    display: flex;
+    flex-wrap: wrap;
+
+    position: fixed;
+    bottom: 6rem;
+    left: 2rem;
+    z-index: 9999;
+
+    width: calc(100% - 4rem);
+    max-width: 14rem;
+    padding: calc(var(--gap) / 2);
+
+    background-color: rgba(var(--rgb-secondary), 0.5);
+    border-radius: var(--border-radius);
+    backdrop-filter: blur(5px);
+
+    opacity: 0;
+    transform: translate(-50%, 75%) scale(0);
+
+    transition: .2s ease;
+    transition-property: transform, opacity
+}
+
+.inventory.open {
+    opacity: 1;
+    transform: translate(0, 0) scale(1)
+}
+
+.inventory > li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: calc(100% / var(--cols) - var(--gap));
+    height: 4rem;
+    margin: calc(var(--gap) / 2);
+
+    border: 1px solid rgba(var(--rgb-primary), 0.5);
+    border-radius: var(--border-radius);
+
+    overflow: hidden;
+}
+
+.inventory > li[data-name] {
+    cursor: pointer;
+    transition: .2s ease;
+    transition-property: border, transform;
+}
+
+.inventory > li img,
+.inventory > li svg {
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: fade-in .6s ease;
+}
+
+.inventory > li[data-name]:hover {
+    border-color: rgba(var(--rgb-primary), 1);
+}
+
+.inventory > li[data-name]:active {
+    transform: scale(0.9);
+}
+
+.inventory__animation {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: calc(100% - 4rem);
+    height: calc(100% - 4rem);
+    max-width: 7.5rem;
+    max-height: 10rem;
+    pointer-events: none;
+}
+
+.inventory__animation img,
+.inventory__animation svg {
+    display: none;
+}
+
+.inventory__animation.animate img,
+.inventory__animation.animate svg {
+    display: block;
+    animation: inventory__bottom-left 1.5s ease;
+}
