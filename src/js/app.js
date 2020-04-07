@@ -7,6 +7,7 @@
 // https://www.taoeffect.com/other/fractals/mandelbulb/
 
 import Engine from './Engine.js'
+import { rgbPercent } from './utilities/color.js'
 // import { GUI } from 'dat.gui'
 
 class App {
@@ -70,6 +71,13 @@ class App {
 
 		this.clear()
 
+		const colors = {
+			backgroundColor: [0, 0, 0, 1.0],
+			diffuseColor: [0, 217, 252, 1.0],
+			ambientColor: [170, 217, 255, 1.0],
+			lightColor: [122, 150, 168, 1.0]
+		}
+
 		this.uniforms = {
 			time: { type: 'f', value: 1.0 },
             modelViewProjectMatrixInverse: { type: 'm4', value: [] },
@@ -87,6 +95,10 @@ class App {
 			specularity: { type: 'f', value: 0.66 },
 			specularExponent: { type: 'f', value: 15.0 },
 			epsilonScale: { type: 'f', value: 1.0 },
+			backgroundColor: { type: 'v4', value: new THREE.Vector4(...rgbPercent([...colors.backgroundColor])) },
+			diffuseColor: { type: 'v4', value: new THREE.Vector4(...rgbPercent([...colors.diffuseColor])) },
+			ambientColor: { type: 'v4', value: new THREE.Vector4(...rgbPercent([...colors.ambientColor])) },
+			lightColor: { type: 'v4', value: new THREE.Vector4(...rgbPercent([...colors.lightColor])) }
 		}
 
 		GUI.add(this.uniforms.power, 'value', -20, 20).step(1).name('power')
@@ -94,13 +106,18 @@ class App {
 		GUI.add(this.uniforms.shadows, 'value', 0.0, 1.0).step(0.01).name('shadows')
 		GUI.add(this.uniforms.ambientOcclusion, 'value', 0.0, 3.0).step(0.1).name('ambientOcclusion')
 		GUI.add(this.uniforms.ambientOcclusionEmphasis, 'value', 0.0, 3.0).step(0.01).name('ambientOcclusionEmphasis')
-		GUI.add(this.uniforms.bounding, 'value', 0.5, 1.5).step(0.1).name('bounding')
+		GUI.add(this.uniforms.bounding, 'value', 0.5, 2.0).step(0.1).name('bounding')
 		GUI.add(this.uniforms.bailout, 'value', 1.0, 5.0).step(0.1).name('bailout')
 		GUI.add(this.uniforms.colorSpread, 'value', 0.0, 5.0).step(0.2).name('colorSpread')
 		GUI.add(this.uniforms.rimLight, 'value', 0.0, 2.0).step(0.1).name('rimLight')
 		GUI.add(this.uniforms.specularity, 'value', 0.0, 2.0).step(0.01).name('specularity')
 		GUI.add(this.uniforms.specularExponent, 'value', 0.0, 30.0).step(1.0).name('specularExponent')
 		GUI.add(this.uniforms.epsilonScale, 'value', 0.0, 1.0).step(0.01).name('epsilonScale')
+
+		GUI.addColor(colors, 'backgroundColor').onChange((value) => this.onChangeColor('backgroundColor', value))
+		GUI.addColor(colors, 'diffuseColor').onChange((value) => this.onChangeColor('diffuseColor', value))
+		GUI.addColor(colors, 'ambientColor').onChange((value) => this.onChangeColor('ambientColor', value))
+		GUI.addColor(colors, 'lightColor').onChange((value) => this.onChangeColor('lightColor', value))
 
 		const geometry = new THREE.PlaneGeometry(2, 2)
 		const material = new THREE.ShaderMaterial({
@@ -122,15 +139,10 @@ class App {
 
 	}
 
-	onUpdateGUI(key, value) {
+	onChangeColor(key, value) {
 
-		switch (key) {
-			default:
-				this.uniforms[key].value = value
-				break
-		}
-
-		console.log('update:', key, value)
+		const v = rgbPercent([...value])
+		this.uniforms[key].value.set(...v)
 
 	}
 

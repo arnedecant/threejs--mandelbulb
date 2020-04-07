@@ -11,3 +11,15 @@ export const hexToRgb = (hex) => {
     }
     
 }
+
+export const rgbPercent = (rgb, multiplier = 1) => {
+
+    console.log('in', [...rgb])
+
+    for (let i = 0; i < 3; i++) rgb[i] /= 255 * multiplier
+
+    console.log('out', [...rgb])
+
+    return rgb
+
+}

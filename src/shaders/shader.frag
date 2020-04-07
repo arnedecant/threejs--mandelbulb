@@ -32,6 +32,11 @@ uniform float rimLight; //=0.0;
 uniform float specularity; //=0.66;
 uniform float specularExponent; //=15.0;
 
+uniform vec4 backgroundColor; //=vec4(0.0, 0.0, 0.0, 1.0);
+uniform vec4 diffuseColor; //=vec4(0.0, 0.85, 0.99, 1.0);
+uniform vec4 ambientColor; //=vec4(0.67, 0.85, 1.0, 1.0);
+uniform vec4 lightColor; //=vec4(0.48, 0.59, 0.66, 0.0);
+
 uniform float epsilonScale; //=1.0; // 0 - 1  "Scale the epsilon step distance. Smaller values are slower but will generate smoother results for thin areas.";
 
 varying vec3 rayDir;
@@ -42,10 +47,6 @@ float pixelSize=1.0;//width/height;//1.0;
 int   antialiasing=1;//"Super sampling quality. Number of samples squared per pixel.";
 
 vec3  light=vec3(38.0, -42.0, 38.0);
-vec4  backgroundColor=vec4(0.0, 0.0, 0.0, 1.0);
-vec4  diffuseColor=vec4(0.0, 0.85, 0.99, 1.0);
-vec4  ambientColor=vec4(0.67, 0.85, 1.0, 1.0);
-vec4  lightColor=vec4(0.48, 0.59, 0.66, 0.0);
 
 float phasex;
 float phasey;
@@ -287,6 +288,109 @@ void main() {
     gl_FragColor = renderPixel(normalize(rayDir));
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /**
 Most of this code was copied from:
 https://code.google.com/p/webgl-mandelbulb/source/browse/3dmandelbrot.html
@@ -373,6 +477,8 @@ Changelog:
  *
  * The code was hosted at http://www.pcprogramming.com/NoiseCube.html
  */
+
+ /*
 
  #ifdef OLD_CODE
 
@@ -609,3 +715,5 @@ float DE_forum_original(vec3 z0, inout float min_dist){//MandelBulb by twinbee
 
 #endif
 
+
+*/
