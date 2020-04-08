@@ -85,6 +85,7 @@ class App {
 				z: 40.0,
 				followCamera: false
 			},
+			speed: 3.0
 		}
 
 		this.uniforms = {
@@ -138,6 +139,7 @@ class App {
 		const folders = {}
 
 		GUI.add(this.uniforms.power, 'value', -20, 20).step(1.0).name('power')
+		GUI.add(this.config, 'speed', -10, 10).step(0.1).name('speed')
 		GUI.add(this.uniforms.phong, 'value').name('phong')
 
 		folders.details = GUI.addFolder('details & performance')
@@ -206,7 +208,7 @@ class App {
 		ENGINE.camera.updateMatrixWorld()
 		// ENGINE.camera.matrixWorldInverse.getInverse(ENGINE.camera.matrixWorld)
 		
-		this.uniforms.time.value += CLOCK.getDelta() * 2
+		this.uniforms.time.value += CLOCK.getDelta() * this.config.speed
 
 		this.modelViewProjectMatrixInverse.multiplyMatrices(ENGINE.camera.projectionMatrix, ENGINE.camera.matrixWorldInverse).multiply(this.mesh.matrixWorld)
 		this.modelViewProjectMatrixInverse.getInverse(this.modelViewProjectMatrixInverse)
