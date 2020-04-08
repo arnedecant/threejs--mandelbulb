@@ -129,6 +129,11 @@ THREE.OrbitControls = function(object, domElement) {
 
     };
 
+    this.rotate = function(degrees) {
+        rotateLeft(degrees);
+        this.update();
+    };
+
     // this method is exposed, but perhaps it would be better if we can make it private...
     this.update = function() {
 

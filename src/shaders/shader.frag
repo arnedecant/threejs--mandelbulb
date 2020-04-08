@@ -35,7 +35,9 @@ uniform float specularExponent; //=15.0;
 uniform vec4 backgroundColor; //=vec4(0.0, 0.0, 0.0, 1.0);
 uniform vec4 diffuseColor; //=vec4(0.0, 0.85, 0.99, 1.0);
 uniform vec4 ambientColor; //=vec4(0.67, 0.85, 1.0, 1.0);
-uniform vec4 lightColor; //=vec4(0.48, 0.59, 0.66, 0.0);
+uniform vec4 lightColor; //=vec4(0.48, 0.59, 0.66, 1.0);
+
+uniform vec3 light; //=vec3(38.0, -42.0, 38.0);
 
 uniform float epsilonScale; //=1.0; // 0 - 1  "Scale the epsilon step distance. Smaller values are slower but will generate smoother results for thin areas.";
 
@@ -45,8 +47,6 @@ float width=512.0;//=512;
 float height=512.0;//=512;
 float pixelSize=1.0;//width/height;//1.0;
 int   antialiasing=1;//"Super sampling quality. Number of samples squared per pixel.";
-
-vec3  light=vec3(38.0, -42.0, 38.0);
 
 float phasex;
 float phasey;
