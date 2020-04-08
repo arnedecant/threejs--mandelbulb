@@ -8,6 +8,7 @@
 
 import Engine from './Engine.js'
 import { rgbPercent } from './utilities/color.js'
+import { clamp } from './utilities/math.js'
 // import { GUI } from 'dat.gui'
 
 class App {
@@ -40,7 +41,7 @@ class App {
 
 		// events
 
-		document.body.addEventListener('click', this.click.bind(this))
+		// ...
 
 		// setup
 
@@ -71,7 +72,7 @@ class App {
 
 		this.clear()
 
-		const config = {
+		this.config = {
 			colors: {
 				backgroundColor: [0, 0, 0, 1.0],
 				diffuseColor: [148, 0, 252, 1.0],
@@ -81,8 +82,9 @@ class App {
 			light: {
 				x: 40.0,
 				y: 30.0,
-				z: 40.0
-			}
+				z: 40.0,
+				followCamera: false
+			},
 		}
 
 		this.uniforms = {
@@ -102,14 +104,14 @@ class App {
 			specularity: { type: 'f', value: 0.66 },
 			specularExponent: { type: 'f', value: 15.0 },
 			epsilonScale: { type: 'f', value: 1.0 },
-			backgroundColor: { type: 'v4', value: new THREE.Vector4(...rgbPercent([...config.colors.backgroundColor])) },
-			diffuseColor: { type: 'v4', value: new THREE.Vector4(...rgbPercent([...config.colors.diffuseColor])) },
-			ambientColor: { type: 'v4', value: new THREE.Vector4(...rgbPercent([...config.colors.ambientColor])) },
-			lightColor: { type: 'v4', value: new THREE.Vector4(...rgbPercent([...config.colors.lightColor])) },
-			light: { type: 'v3', value: new THREE.Vector3(config.light.x, config.light.y, config.light.z) }
+			backgroundColor: { type: 'v4', value: new THREE.Vector4(...rgbPercent([...this.config.colors.backgroundColor])) },
+			diffuseColor: { type: 'v4', value: new THREE.Vector4(...rgbPercent([...this.config.colors.diffuseColor])) },
+			ambientColor: { type: 'v4', value: new THREE.Vector4(...rgbPercent([...this.config.colors.ambientColor])) },
+			lightColor: { type: 'v4', value: new THREE.Vector4(...rgbPercent([...this.config.colors.lightColor])) },
+			light: { type: 'v3', value: new THREE.Vector3(this.config.light.x, this.config.light.y, this.config.light.z) }
 		}
 
-		this.initGUI(config)
+		this.initGUI(this.config)
 
 		const geometry = new THREE.PlaneGeometry(2, 2)
 		const material = new THREE.ShaderMaterial({
@@ -131,7 +133,7 @@ class App {
 
 	}
 
-	initGUI(config) {
+	initGUI(config = this.config) {
 
 		const folders = {}
 
@@ -152,6 +154,14 @@ class App {
 		folders.shadows.add(this.uniforms.ambientOcclusion, 'value', 0.0, 3.0).step(0.1).name('ambientOcclusion')
 		folders.shadows.add(this.uniforms.ambientOcclusionEmphasis, 'value', 0.0, 3.0).step(0.01).name('emphasis')
 
+		folders.light = GUI.addFolder('light')
+
+		folders.light.add(config.light, 'followCamera').name('follow camera')
+		folders.light.add(config.light, 'x', -100, 100).step(1).onChange((value) => this.uniforms.light.value.x = value).listen()
+		folders.light.add(config.light, 'y', -100, 100).step(1).onChange((value) => this.uniforms.light.value.y = value).listen()
+		folders.light.add(config.light, 'z', -100, 100).step(1).onChange((value) => this.uniforms.light.value.z = value).listen()
+		folders.light.add(this.uniforms.rimLight, 'value', 0.0, 3.0).step(0.1).name('rim')
+
 		folders.colors = GUI.addFolder('colors')
 
 		folders.colors.addColor(config.colors, 'backgroundColor').onChange((value) => this.onChangeColor('backgroundColor', value))
@@ -159,13 +169,6 @@ class App {
 		folders.colors.addColor(config.colors, 'ambientColor').onChange((value) => this.onChangeColor('ambientColor', value))
 		folders.colors.addColor(config.colors, 'lightColor').onChange((value) => this.onChangeColor('lightColor', value))
 		folders.colors.add(this.uniforms.colorSpread, 'value', 0.0, 5.0).step(0.2).name('colorSpread')
-
-		folders.light = GUI.addFolder('light')
-
-		folders.light.add(config.light, 'x', -100, 100).step(1).onChange((value) => this.uniforms.light.value.x = value)
-		folders.light.add(config.light, 'y', -100, 100).step(1).onChange((value) => this.uniforms.light.value.y = value)
-		folders.light.add(config.light, 'z', -100, 100).step(1).onChange((value) => this.uniforms.light.value.z = value)
-		folders.light.add(this.uniforms.rimLight, 'value', 0.0, 3.0).step(0.1).name('rim')
 
 	}
 
@@ -176,15 +179,32 @@ class App {
 
 	}
 
-	click(e) {
+	updateLight() {
 
-		
+		const multiplier = 33
+
+		let pos = {
+			x: ENGINE.camera.position.x * multiplier,
+			y: ENGINE.camera.position.y * multiplier,
+			z: ENGINE.camera.position.z * multiplier
+		}
+
+		for (let axis in pos) pos[axis] = clamp(pos[axis], -100, 100)
+
+		this.config.light.x = pos.x
+		this.config.light.y = pos.y
+		this.config.light.z = pos.z
+
+		this.uniforms.light.value.x = pos.x
+		this.uniforms.light.value.y = pos.y
+		this.uniforms.light.value.z = pos.z
 
 	}
 
 	render(timestamp) {
 
 		ENGINE.camera.updateMatrixWorld()
+		// ENGINE.camera.matrixWorldInverse.getInverse(ENGINE.camera.matrixWorld)
 		
 		this.uniforms.time.value += CLOCK.getDelta() * 2
 
@@ -192,9 +212,7 @@ class App {
 		this.modelViewProjectMatrixInverse.getInverse(this.modelViewProjectMatrixInverse)
 		this.uniforms.modelViewProjectMatrixInverse.value = this.modelViewProjectMatrixInverse
 
-		// this.mesh.rotation.x += Math.PI
-
-		// this.mesh.rotation.x += 0.00001
+		if (this.config.light.followCamera) this.updateLight()
             
         // render ENGINE
 
